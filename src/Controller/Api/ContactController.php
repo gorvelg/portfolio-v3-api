@@ -9,6 +9,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Email;
+use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class ContactController extends AbstractController
@@ -58,17 +59,16 @@ class ContactController extends AbstractController
             ], 422);
         }
 
-        $email = (new Email())
+        $email = (new TemplatedEmail())
             ->from('contact@guillaume-gorvel.fr')
             ->to('contact@guillaume-gorvel.fr')
             ->replyTo($contactRequest->email)
             ->subject('Nouveau message depuis le portfolio.')
-            ->text(
-                "Nom : {$contactRequest->name}\n" .
-                "Prénom : {$contactRequest->firstname}\n" .
-                "Email : {$contactRequest->email}\n\n" .
-                "Message :\n{$contactRequest->message}"
-            );
+            ->htmlTemplate('emails/contact.html.twig')
+            ->context([
+                'contactRequest' => $contactRequest,
+            ])
+        ;
 
         $mailer->send($email);
 
