@@ -31,6 +31,7 @@ class ContactController extends AbstractController
         $contactRequest = new ContactRequest();
         $contactRequest->name = trim($payload['name'] ?? '');
         $contactRequest->firstname = trim($payload['firstname'] ?? '');
+        $contactRequest->phone = trim($payload['phone'] ?? '');
         $contactRequest->email = trim($payload['email'] ?? '');
         $contactRequest->message = trim($payload['message'] ?? '');
         $contactRequest->website = trim($payload['website'] ?? '');
